@@ -43,7 +43,7 @@ $(function () {
   });
 
   socket.on('status', function(msg){
-    $('#user_count').text('Verbundene Computer: ' + msg.users);
+    $('#user_count').text('Verbundene Geräte: ' + msg.users);
   });
 
   //buttons 
