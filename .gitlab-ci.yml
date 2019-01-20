@@ -7,4 +7,4 @@ build:
   script:
   - yarn
   - ln -s /media/songs ./src/static
-  - yarn run start &! | true
+  - yarn run start &! true
