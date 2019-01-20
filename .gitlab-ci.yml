@@ -6,4 +6,5 @@ build:
   image: node:latest
   script:
   - yarn
-  - yarn run start &!
+  - ln -s /media/songs ./src/static
+  - yarn run start &! | true
