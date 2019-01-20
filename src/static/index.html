@@ -72,12 +72,23 @@
             <div class="col-xs-2">
               <button id='stopBtn' class='btn btn-danger'><i class='fa fa-stop'></i></button>
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-8">
+              <button id='aLoopBtn' class='btn btn-warning'><b>A</b></button>
+              <label class="info-txt-small" id="txt-aLoop">0:00</label>
+              <i class='fa fa-repeat'></i>
+              <label class="info-txt-small" id="txt-bLoop">0:00</label>
+              <button id='bLoopBtn' class='btn btn-danger'><b>B</b></button>
+              <button id='resetLoopBtn' class='btn btn-danger'><i class='fa fa-times'></i></button> 
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-xs-6">
               <label class="info-txt-small">Geschwindigkeit:</label>
               <label class="info-txt-small align-right" id="txt-speed">100%</label>
               <input type="range" min="50" max="200" value="100" class="slider" id="speed-slider">
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-6">
               <label class="info-txt-small">Lautstärke:</label>
               <label class="info-txt-small align-right" id="txt-volume">70%</label>
               <input type="range" min="0" max="1000" value="700" class="slider" id="volume-slider">

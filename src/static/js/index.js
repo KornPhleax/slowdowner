@@ -6,6 +6,8 @@ var columns = [
 var currentSong = null;
 var songDir = [];
 var player = null;
+var aLoopTime = null;
+var bLoopTime = null;
 
 // init socket io and 
 $(function () {
@@ -61,6 +63,29 @@ $(function () {
       return
     player.stop();
   });
+
+  $( '#aLoopBtn' ).click(function(){
+    if(player == null)
+      return
+    aLoopTime = player.getPosition();
+    $( '#bLoopBtn' ).prop("disabled", false);
+    $( '#txt-aLoop' ).html(player.formatTime(Math.round(aLoopTime)));
+  });
+
+  $( '#bLoopBtn' ).click(function(){
+    if(player == null)
+      return
+    bLoopTime = player.getPosition();
+    $( '#aLoopBtn' ).prop("disabled", false);
+    $( '#resetLoopBtn' ).prop("disabled", false);
+    $( '#txt-bLoop' ).html(player.formatTime(Math.round(bLoopTime)));
+  });
+
+  $( '#resetLoopBtn' ).click(function(){
+    if(player == null)
+      return
+    resetLoop();
+  });
   
   //dropdown  
 
@@ -93,6 +118,9 @@ $(function () {
 function updateDisplay(){
   playBtn     = $( '#playBtn' );
   stopBtn     = $( '#stopBtn' );
+  aLoopBtn    = $( '#aLoopBtn' );
+  bLoopBtn    = $( '#bLoopBtn' );
+  resetLoopBtn= $( '#resetLoopBtn' );
 
   volumeSl    = $( '#volume-slider' );
   speedSl     = $( '#speed-slider' );
@@ -100,17 +128,18 @@ function updateDisplay(){
 
   speedTxt    = $( '#txt-speed' );
   volumeTxt   = $( '#txt-volume' );
-  timerTxt    = $( '#txt-timer' );
-  durationTxt = $( '#txt-duration' );
-  titelTxt    = $( '#txt-titel' );
 
   if(player == null){
     playBtn.prop("disabled", true);
     stopBtn.prop("disabled", true);
+    aLoopBtn.prop("disabled", true);
+    bLoopBtn.prop("disabled", true);
+    resetLoopBtn.prop("disabled", true);
     positionSl.prop("disabled", true);
   }else{
     stopBtn.prop("disabled", false);
     positionSl.prop("disabled", false);
+    aLoopBtn.prop("disabled", false);
     player.rate(speedSl[0].value/100);
     player.volume(volumeSl[0].value/1000);
   }
@@ -148,16 +177,26 @@ function tableClickListener(){
   });
 }
 
+function resetLoop(){
+  aLoopTime = null;
+  bLoopTime = null;
+  $( '#txt-aLoop' ).html('0:00');
+  $( '#txt-bLoop' ).html('0:00');
+  $( '#bLoopBtn' ).prop("disabled", true);
+  $( '#resetLoopBtn' ).prop("disabled", true);
+}
 
 var Player = function(songName) {
   this.song = songName;
   let dir = $( '#dir-dropdown' ).find(":selected").text();
   this.url = './songs/' + dir + '/' + songName;
   this.howl = null;
+  resetLoop();
 
   // Display the title of the first track.
   $( '#txt-titel' ).text(songName);
 };
+
 Player.prototype = {
   /**
    * Play a song.
@@ -184,6 +223,7 @@ Player.prototype = {
         onload: function() {
           $( '#txt-duration' ).text(self.formatTime(Math.round(sound.duration())));
           $( '#playBtn' ).prop("disabled", false);
+          self.step();
         },
         onend: function() {
           $( '#playBtn' ).removeClass('btn-warning').addClass('btn-succes');
@@ -290,6 +330,10 @@ Player.prototype = {
 
     // Determine our current seek position.
     var seek = sound.seek() || 0;
+    if(aLoopTime != null && bLoopTime != null){
+      if(seek > bLoopTime)
+        sound.seek(aLoopTime);
+    }
     $( '#txt-timer' ).text(self.formatTime(Math.round(seek)));
     $( '#position-slider' ).val(((seek / sound.duration())*1000) || 0);
 
@@ -312,6 +356,18 @@ Player.prototype = {
       return false;
 
     return (sound.playing());
+  },
+
+  /**
+   * get raw position in seconds
+   * @return {long} seconds
+   */
+  getPosition: function() {
+    var self = this;
+    var sound = self.howl;
+    if (sound == null)
+      return 0;
+    return sound.seek();
   },
 
   /**
