@@ -32,6 +32,7 @@ $(function () {
       songDir.forEach(function(dir){
         $( '#dir-dropdown' ).append('<option>'+dir.name+'</option>');
       });
+      updateTable();
     }
   });
 
@@ -64,29 +65,58 @@ $(function () {
   //dropdown  
 
   $( '#dir-dropdown' ).change(function () {
-    updateTable()
+    updateTable();
   });
 
   //sliders
 
   $( '#position-slider' ).change(function () {
-    if(player == null)
-      return
     player.seek(this.value/1000);
+    updateDisplay();
   });
 
   $( '#speed-slider' ).change(function () {
-    if(player == null)
-      return
-    player.rate(this.value/100);
+    updateDisplay();
   });
 
   $( '#volume-slider' ).change(function () {
-    if(player == null)
-      return
-    player.volume(this.value/1000);
+    updateDisplay();
   });
+
+  $('input[type=range]').on('input', function () {
+    $(this).trigger('change');
+  });
+
+  updateDisplay();
 });
+
+function updateDisplay(){
+  playBtn     = $( '#playBtn' );
+  stopBtn     = $( '#stopBtn' );
+
+  volumeSl    = $( '#volume-slider' );
+  speedSl     = $( '#speed-slider' );
+  positionSl  = $( '#position-slider' );
+
+  speedTxt    = $( '#txt-speed' );
+  volumeTxt   = $( '#txt-volume' );
+  timerTxt    = $( '#txt-timer' );
+  durationTxt = $( '#txt-duration' );
+  titelTxt    = $( '#txt-titel' );
+
+  if(player == null){
+    playBtn.prop("disabled", true);
+    stopBtn.prop("disabled", true);
+    positionSl.prop("disabled", true);
+  }else{
+    stopBtn.prop("disabled", false);
+    positionSl.prop("disabled", false);
+    player.rate(speedSl[0].value/100);
+    player.volume(volumeSl[0].value/1000);
+  }
+  speedTxt.html((speedSl[0].value) + '%');
+  volumeTxt.html(Math.round(volumeSl[0].value/10) + '%');
+}
 
 function updateTable(){
   songDir.forEach(function(dir){
@@ -113,6 +143,8 @@ function tableClickListener(){
     if(player != null && player.isPlaying())
       player.pause();
     player = new Player(songName);
+    player.init();
+    updateDisplay();
   });
 }
 
@@ -125,13 +157,13 @@ var Player = function(songName) {
 
   // Display the title of the first track.
   $( '#txt-titel' ).text(songName);
-  console.log(songName);
 };
 Player.prototype = {
   /**
    * Play a song.
    */
-  play: function() {
+  init: function() {
+    $( '#playBtn' ).prop("disabled", true);
     let self = this;
     let sound;
     // If we already loaded this track, use the current one.
@@ -143,21 +175,22 @@ Player.prototype = {
         src: [self.url],
         html5: true, // Force to HTML5 so that the audio can stream in (best for large files).
         onplay: function() {
-          // Display the duration.
-          $( '#txt-duration' ).text(self.formatTime(Math.round(sound.duration())));
+          updateDisplay();
           $( '#playBtn' ).removeClass('btn-succes').addClass('btn-warning');
           $( '#playBtn i' ).removeClass('fa-play').addClass('fa-pause');
           // Start upating the progress of the track.
           requestAnimationFrame(self.step.bind(self));
         },
         onload: function() {
-
+          $( '#txt-duration' ).text(self.formatTime(Math.round(sound.duration())));
+          $( '#playBtn' ).prop("disabled", false);
         },
         onend: function() {
+          $( '#playBtn' ).removeClass('btn-warning').addClass('btn-succes');
+          $( '#playBtn i' ).removeClass('fa-pause').addClass('fa-play');
           self.seek(0);
         },
         onpause: function() {
-          console.log("pause");
           $( '#playBtn' ).removeClass('btn-warning').addClass('btn-succes');
           $( '#playBtn i' ).removeClass('fa-pause').addClass('fa-play');
         },
@@ -168,8 +201,15 @@ Player.prototype = {
         }
       });
     }
+  },
 
-    // Begin playing the sound.
+  play: function() {
+    var self = this;
+
+    // Get the Howl we want to manipulate.
+    var sound = self.howl;
+
+    // Puase the sound.
     sound.play();
   },
 
@@ -286,3 +326,8 @@ Player.prototype = {
     return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
   }
 };
+
+function clog(msg){
+  console.log(msg);
+  socket.emit('log', msg);
+}

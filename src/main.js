@@ -20,6 +20,9 @@ io.on('connection', function(socket){
   io.emit('status', {"users": users.length});
   get_dirs(socket);
 
+  socket.on('log', function(msg){
+    console.log('id: ' + this.id + ' LOG:' + msg);
+  });
 
   socket.on('disconnect', function(){
     console.log('id: ' + this.id + ' disconnected');

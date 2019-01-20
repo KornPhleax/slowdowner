@@ -25,7 +25,7 @@ body {
   text-align: right;
 }
 
-#txt-duration {
+.align-right {
   float: right;
   text-align: right;
 }

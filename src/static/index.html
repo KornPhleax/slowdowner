@@ -21,15 +21,18 @@
     <script src='/socket.io/socket.io.js'></script>
     <script src='/js/index.js'></script>
 
-    <title>Slowdowner</title>
+    <title>SlowDowner</title>
   </head>
 
 
   <body>
     <nav class='navbar navbar-inverse'>
+      <a class="navbar-brand" href="/">
+        <img src="/img/favicon.ico" width="25" height="25" alt="SlowDowner Logo">
+      </a>
       <div class='container-fluid'>
         <div class='navbar-header'>
-          <a class='navbar-brand' href=''>Slowdowner</a>
+          <a class='navbar-brand' href='/'>SlowDowner</a>
         </div>
         <p class='navbar-text navbar-right'><span>&zwnj;</span></p>
         <ul class='nav navbar-nav navbar-right'>
@@ -53,11 +56,11 @@
             </thead>
           </table>
         </div>
-        <div class='well  col-sm-7'>
+        <div class='well col-sm-7'>
           <label class="info-txt" id="txt-titel">Titel</label><br>
           <br>
           <label class="info-txt-small" id="txt-timer">0:00</label>
-          <label class="info-txt-small" id="txt-duration">0:00</label>
+          <label class="info-txt-small align-right" id="txt-duration">0:00</label>
           <div class="slidecontainer">
             <input type="range" min="0" max="1000" value="0" class="slider" id="position-slider">
           </div>
@@ -70,11 +73,13 @@
               <button id='stopBtn' class='btn btn-danger'><i class='fa fa-stop'></i></button>
             </div>
             <div class="col-xs-4">
-              <label>Geschwindigkeit:</label>
+              <label class="info-txt-small">Geschwindigkeit:</label>
+              <label class="info-txt-small align-right" id="txt-speed">100%</label>
               <input type="range" min="50" max="200" value="100" class="slider" id="speed-slider">
             </div>
             <div class="col-xs-4">
-              <label>Lautstärke:</label>
+              <label class="info-txt-small">Lautstärke:</label>
+              <label class="info-txt-small align-right" id="txt-volume">70%</label>
               <input type="range" min="0" max="1000" value="700" class="slider" id="volume-slider">
             </div>
           </div>
