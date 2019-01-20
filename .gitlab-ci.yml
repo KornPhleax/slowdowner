@@ -1,0 +1,9 @@
+stages:
+- build
+
+build:
+  stage: build
+  image: node:latest
+  script:
+  - yarn
+  - yarn run start &!
