@@ -5,7 +5,7 @@ build:
   stage: build
   image: node:latest
   script:
-  - killall node
+  - killall node >> /dev/null 2>&1
   - yarn
   - ln -s /media/songs ./src/static
   - yarn run start >> /var/log/slowdowner/access.log 2>&1 & true
