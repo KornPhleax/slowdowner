@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8"> 
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link rel='shortcut icon' type='image/png' href='/img/favicon.ico'/>
+    <link rel='stylesheet' href='/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='/css/jquery-ui.min.css'>
+    <link rel='stylesheet' href='/css/jquery-ui.structure.min.css'>
+    <link rel='stylesheet' href='/css/jquery-ui.theme.min.css'>
+    <link rel='stylesheet' href='/css/datatables.min.css'/>
+    <link rel='stylesheet' href='/css/font-awesome.min.css'>
+    <link rel='stylesheet' href='/css/main.css'>
+
+    <script src='/js/howler.min.js'></script>
+    <script src='/js/howler.core.min.js'></script>
+    <script src='/js/jquery.min.js'></script>
+    <script src='/js/jquery-ui.min.js'></script>
+    <script src='/js/datatables.min.js'></script>
+    <script src='/js/bootstrap.min.js'></script>
+    <script src='/socket.io/socket.io.js'></script>
+    <script src='/js/index.js'></script>
+
+    <title>Slowdowner</title>
+  </head>
+
+
+  <body>
+    <nav class='navbar navbar-inverse'>
+      <div class='container-fluid'>
+        <div class='navbar-header'>
+          <a class='navbar-brand' href=''>Slowdowner</a>
+        </div>
+        <p class='navbar-text navbar-right'><span>&zwnj;</span></p>
+        <ul class='nav navbar-nav navbar-right'>
+          <li class='navbar-text' id='user_count' style='color: #FFFFFF;'>Verbundene Computer: 0</li>
+        </ul>
+      </div>
+    </nav>
+    
+    <div class='wrapper'>
+      <div class='col-sm-12'>
+        <div class='col-sm-5'>
+          <div class="input-group mb-3">
+            <label class="info-txt">Ordner:</label>
+            <select class="custom-select" id="dir-dropdown"></select>
+          </div>
+          <table id='songlist' class='table table-bordered'>
+            <thead>
+            <tr>
+              <th>Stücke</th>
+            </tr>
+            </thead>
+          </table>
+        </div>
+        <div class='well  col-sm-7'>
+          <label class="info-txt" id="txt-titel">Titel</label><br>
+          <br>
+          <label class="info-txt-small" id="txt-timer">0:00</label>
+          <label class="info-txt-small" id="txt-duration">0:00</label>
+          <div class="slidecontainer">
+            <input type="range" min="0" max="1000" value="0" class="slider" id="position-slider">
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-xs-2">
+              <button id='playBtn' class='btn btn-success'><i class='fa fa-play'></i></button>
+            </div>
+            <div class="col-xs-2">
+              <button id='stopBtn' class='btn btn-danger'><i class='fa fa-stop'></i></button>
+            </div>
+            <div class="col-xs-4">
+              <label>Geschwindigkeit:</label>
+              <input type="range" min="50" max="200" value="100" class="slider" id="speed-slider">
+            </div>
+            <div class="col-xs-4">
+              <label>Lautstärke:</label>
+              <input type="range" min="0" max="1000" value="700" class="slider" id="volume-slider">
+            </div>
+          </div>
+        </div>
+        <footer>
+          <p>&#169;2019 Felix Hartmann</p>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
