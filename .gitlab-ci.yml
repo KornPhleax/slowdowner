@@ -10,3 +10,4 @@ build:
   - cp -r ./* ~/slowdowner
   - ln -s /media/songs ~/slowdowner/src/static
   - sudo /bin/systemctl restart slowdowner.service
+  - sudo /bin/systemctl status slowdowner.service
