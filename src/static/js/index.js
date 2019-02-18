@@ -112,6 +112,24 @@ $(function () {
     $(this).trigger('change');
   });
 
+  $('#extFile').change(function () {
+    event = this
+    if (event.files.length > 0) {
+    var file = event.files[0];
+    var reader = new FileReader();
+    var songName = event.files[0].name;
+    reader.addEventListener('load', function() {
+      var data = reader.result;
+      if(player != null && player.isPlaying())
+        player.pause();
+      player = new Player(songName, data);
+      player.init();
+      updateDisplay();
+    });
+    reader.readAsDataURL(file);
+  }
+  });
+
   updateDisplay();
 });
 
@@ -186,10 +204,15 @@ function resetLoop(){
   $( '#resetLoopBtn' ).prop("disabled", true);
 }
 
-var Player = function(songName) {
-  this.song = songName;
-  let dir = $( '#dir-dropdown' ).find(":selected").text();
-  this.url = './songs/' + dir + '/' + songName;
+var Player = function(songName, data=null) {
+  if(data != null){
+    this.song = songName;
+    this.url = data;
+  }else{
+    this.song = songName;
+    let dir = $( '#dir-dropdown' ).find(":selected").text();
+    this.url = './songs/' + dir + '/' + songName;
+  }
   this.howl = null;
   resetLoop();
 
