@@ -1,17 +1,20 @@
-var socket = null;
-var table = null;
-var columns = [
+import { socket } from  './common.js';
+import 'howler';
+import 'datatables';
+
+let tableAPI = null;
+let table = null;
+let columns = [
   { data: 'name' }
 ];
-var currentSong = null;
-var songDir = [];
-var player = null;
-var aLoopTime = null;
-var bLoopTime = null;
+let currentSong = null;
+let songDir = [];
+let player = null;
+let aLoopTime = null;
+let bLoopTime = null;
 
-// init socket io and 
+// init socket io
 $(function () {
-  socket = io();
   table = $('#songlist').DataTable({
     paging: true,
     bLengthChange : false,
@@ -26,8 +29,9 @@ $(function () {
   });
 
   //socket io stuff 
-
-  socket.on('update_dirs', function(msg){
+  socket.emit('update', 'songs');
+  
+  socket.on('update_songs', function(msg){
     if(msg != null){
       songDir = msg;
       $( '#dir-dropdown' ).html("");
@@ -40,10 +44,6 @@ $(function () {
 
   socket.on('message', function(msg){
     console.log(msg);
-  });
-
-  socket.on('status', function(msg){
-    $('#user_count').text('Verbundene Geräte: ' + msg.users);
   });
 
   //buttons 
@@ -113,13 +113,13 @@ $(function () {
   });
 
   $('#extFile').change(function () {
-    event = this
+    let event = this
     if (event.files.length > 0) {
-    var file = event.files[0];
-    var reader = new FileReader();
-    var songName = event.files[0].name;
+    let file = event.files[0];
+    let reader = new FileReader();
+    let songName = event.files[0].name;
     reader.addEventListener('load', function() {
-      var data = reader.result;
+      let data = reader.result;
       if(player != null && player.isPlaying())
         player.pause();
       player = new Player(songName, data);
@@ -134,18 +134,18 @@ $(function () {
 });
 
 function updateDisplay(){
-  playBtn     = $( '#playBtn' );
-  stopBtn     = $( '#stopBtn' );
-  aLoopBtn    = $( '#aLoopBtn' );
-  bLoopBtn    = $( '#bLoopBtn' );
-  resetLoopBtn= $( '#resetLoopBtn' );
+  let playBtn     = $( '#playBtn' );
+  let stopBtn     = $( '#stopBtn' );
+  let aLoopBtn    = $( '#aLoopBtn' );
+  let bLoopBtn    = $( '#bLoopBtn' );
+  let resetLoopBtn= $( '#resetLoopBtn' );
 
-  volumeSl    = $( '#volume-slider' );
-  speedSl     = $( '#speed-slider' );
-  positionSl  = $( '#position-slider' );
+  let volumeSl    = $( '#volume-slider' );
+  let speedSl     = $( '#speed-slider' );
+  let positionSl  = $( '#position-slider' );
 
-  speedTxt    = $( '#txt-speed' );
-  volumeTxt   = $( '#txt-volume' );
+  let speedTxt    = $( '#txt-speed' );
+  let volumeTxt   = $( '#txt-volume' );
 
   if(player == null){
     playBtn.prop("disabled", true);
@@ -178,11 +178,11 @@ function updateTable(){
 function tableClickListener(){
   $( "tbody tr").unbind();
   $( "tbody tr").hover(function(){
-    var selected = $(this).hasClass("ui-state-highlight");
-      $("tbody tr").removeClass("ui-state-highlight");
-      if (!selected) {
-        $(this).addClass("ui-state-highlight");
-      }
+    let selected = $(this).hasClass("ui-state-highlight");
+    $("tbody tr").removeClass("ui-state-highlight");
+    if (!selected) {
+      $(this).addClass("ui-state-highlight");
+    }
   });
 
   $( "tbody tr").click(function(){
@@ -204,7 +204,7 @@ function resetLoop(){
   $( '#resetLoopBtn' ).prop("disabled", true);
 }
 
-var Player = function(songName, data=null) {
+let Player = function(songName, data=null) {
   if(data != null){
     this.song = songName;
     this.url = data;
@@ -238,8 +238,9 @@ Player.prototype = {
         html5: true, // Force to HTML5 so that the audio can stream in (best for large files).
         onplay: function() {
           updateDisplay();
+          console.log('pressed play button');
           $( '#playBtn' ).removeClass('btn-succes').addClass('btn-warning');
-          $( '#playBtn i' ).removeClass('fa-play').addClass('fa-pause');
+          $( '#playBtn svg' ).removeClass('fa-play').addClass('fa-pause');
           // Start upating the progress of the track.
           requestAnimationFrame(self.step.bind(self));
         },
@@ -250,12 +251,12 @@ Player.prototype = {
         },
         onend: function() {
           $( '#playBtn' ).removeClass('btn-warning').addClass('btn-succes');
-          $( '#playBtn i' ).removeClass('fa-pause').addClass('fa-play');
+          $( '#playBtn svg' ).removeClass('fa-pause').addClass('fa-play');
           self.seek(0);
         },
         onpause: function() {
           $( '#playBtn' ).removeClass('btn-warning').addClass('btn-succes');
-          $( '#playBtn i' ).removeClass('fa-pause').addClass('fa-play');
+          $( '#playBtn svg' ).removeClass('fa-pause').addClass('fa-play');
         },
         onstop: function() {
         },
@@ -267,10 +268,10 @@ Player.prototype = {
   },
 
   play: function() {
-    var self = this;
+    let self = this;
 
     // Get the Howl we want to manipulate.
-    var sound = self.howl;
+    let sound = self.howl;
 
     // Puase the sound.
     sound.play();
@@ -280,10 +281,10 @@ Player.prototype = {
    * Pause the currently playing track.
    */
   pause: function() {
-    var self = this;
+    let self = this;
 
     // Get the Howl we want to manipulate.
-    var sound = self.howl;
+    let sound = self.howl;
 
     // Puase the sound.
     sound.pause();
@@ -293,10 +294,10 @@ Player.prototype = {
    * stop the currently playing track.
    */
   stop: function() {
-    var self = this;
+    let self = this;
 
     // Get the Howl we want to manipulate.
-    var sound = self.howl;
+    let sound = self.howl;
 
     // stop the sound.
     sound.pause();
@@ -308,7 +309,7 @@ Player.prototype = {
    * @param  {Number} val Volume between 0 and 1.
    */
   volume: function(val) {
-    var self = this;
+    let self = this;
 
     // Update the global volume (affecting all Howls).
     Howler.volume(val);
@@ -319,10 +320,10 @@ Player.prototype = {
    * @param  {Number} per Percentage through the song to skip.
    */
   seek: function(per) {
-    var self = this;
+    let self = this;
 
     // Get the Howl we want to manipulate.
-    var sound = self.howl;
+    let sound = self.howl;
 
     // Convert the percent into a seek position.
     sound.seek(sound.duration() * per);
@@ -333,10 +334,10 @@ Player.prototype = {
    * @param  {Number} speed from 0.5 to 4 times 
    */
   rate: function(speed) {
-    var self = this;
+    let self = this;
 
     // Get the Howl we want to manipulate.
-    var sound = self.howl;
+    let sound = self.howl;
 
     // Convert the percent into a seek position.
     sound.rate(speed);
@@ -346,13 +347,13 @@ Player.prototype = {
    * The step called within requestAnimationFrame to update the playback position.
    */
   step: function() {
-    var self = this;
+    let self = this;
 
     // Get the Howl we want to manipulate.
-    var sound = self.howl;
+    let sound = self.howl;
 
     // Determine our current seek position.
-    var seek = sound.seek() || 0;
+    let seek = sound.seek() || 0;
     if(aLoopTime != null && bLoopTime != null){
       if(seek > bLoopTime)
         sound.seek(aLoopTime);
@@ -370,10 +371,10 @@ Player.prototype = {
    * true, if playing
    */
   isPlaying: function() {
-    var self = this;
+    let self = this;
 
     // Get the Howl we want to manipulate.
-    var sound = self.howl;
+    let sound = self.howl;
 
     if(sound == null)
       return false;
@@ -386,8 +387,8 @@ Player.prototype = {
    * @return {long} seconds
    */
   getPosition: function() {
-    var self = this;
-    var sound = self.howl;
+    let self = this;
+    let sound = self.howl;
     if (sound == null)
       return 0;
     return sound.seek();
@@ -399,8 +400,8 @@ Player.prototype = {
    * @return {String}      Formatted time.
    */
   formatTime: function(secs) {
-    var minutes = Math.floor(secs / 60) || 0;
-    var seconds = (secs - minutes * 60) || 0;
+    let minutes = Math.floor(secs / 60) || 0;
+    let seconds = (secs - minutes * 60) || 0;
 
     return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
   }

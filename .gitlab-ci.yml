@@ -6,8 +6,10 @@ build:
   image: node:latest
   script:
   - yarn
+  - yarn run build
   - rm -rf ~/slowdowner/*
   - cp -r ./* ~/slowdowner
-  - ln -s /media/songs ~/slowdowner/src/static
+  - ln -s /media/cloud/Musik ~/slowdowner/dist/songs
+  - ln -s /media/cloud/Noten ~/slowdowner/dist/sheets
   - sudo /bin/systemctl restart slowdowner.service
   - sudo /bin/systemctl status slowdowner.service

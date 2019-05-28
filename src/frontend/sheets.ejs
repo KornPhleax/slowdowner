@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Noten</title>
+    ${require ('./views/head.html')}
+  </head>
+  <body>
+    ${require ('./views/menu.html')}
+    <div class='container-fluid'>
+      <div class='row'>
+        <div class='col-md-12'>
+            <div class="alert alert-primary" role="alert">
+              Die Noten Anzeige ist noch nicht ganz ausgereift und funktioniert z.Z. noch nicht auf mobilen Geräten. <br>
+              Empfohlen wird Google Chrome (Chromium) oder Mozilla Firefox.
+            </div>
+        </div>
+        <div class='col-md-5'>
+          <div class="input-group mb-3">
+            <select class="custom-select" id="dir-dropdown"></select>
+          </div>
+          <table id='sheetlist' class='table table-bordered'>
+            <thead>
+            <tr>
+              <th>Stücke</th>
+            </tr>
+            </thead>
+          </table>
+        </div>
+        <div class='col-md-7'>
+          <div id='pdf_viewer'></div>
+        </div>
+      </div>
+      ${require ('./views/footer.html')}
+    </div>
+  </body>
+</html>

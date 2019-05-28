@@ -1,11 +1,35 @@
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~datatables/media/css/jquery.dataTables.min.css";
+
+
+/* Colors */
+$secondary-color:   #456632;
+$bg-dark:           #343a40;
+
+
+/* scss */
+@supports (-webkit-overflow-scrolling: touch) {
+  /* no volume on iOS */
+  .not-on-iOS{
+    display: none;
+  }
+}
+
+
+/* old css */
 * { 
   margin: 0; 
   padding: 0; 
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 body { 
-  font: 13px Helvetica, Arial; 
+  font: 13px Helvetica, Arial;
+}
+
+.container-fluid {
+  max-width: 1100px;
+  min-width: 25em;
 }
 
 .info-txt{
@@ -28,6 +52,14 @@ body {
 .align-right {
   float: right;
   text-align: right;
+}
+
+.row {
+  padding: 2em;
+}
+
+.spacer-bottom {
+  padding-bottom: 2em;
 }
 
 .slidecontainer {
@@ -69,7 +101,28 @@ body {
   cursor: pointer; /* Cursor on hover */
 }
 
+#songlist_paginate {
+  border-color: $bg-dark;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 5px;
+}
+
+#songlist_info {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+#songlist_wrapper {
+  padding-bottom: 1em;
+}
+
 .dataTables_wrapper .dataTables_filter {
   float: right;
   text-align: right;
+}
+
+.ui-state-highlight {
+  color: #FFFFFF !important;
+  background: $bg-dark !important;
 }

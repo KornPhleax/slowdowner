@@ -11,14 +11,21 @@ var fs = require('fs');
 
 var users = [];
 
-app.use(express.static(path.join(__dirname, 'static')));
+var allowed_dirs = ['sheets', 'songs'];
+
+app.use(express.static(path.join(__dirname, '../dist')));
 
 io.on('connection', function(socket){
   users.push(socket);
   console.log('id: ' + socket.id + ' connected');
   io.to(socket.id).emit('message','welcome. you are ' + socket.id)
   io.emit('status', {"users": users.length});
-  get_dirs(socket);
+
+  socket.on('update', function(req){
+    if(allowed_dirs.indexOf(req) >= 0){
+      get_file_list(socket, req);
+    }
+  });
 
   socket.on('log', function(msg){
     console.log('id: ' + this.id + ' LOG:' + msg);
@@ -35,15 +42,16 @@ http.listen(PORT, ADDRESS, function(){
     console.log("listening on port " + PORT + " and host " + ADDRESS);
 });
 
-function get_dirs(socket){
+function get_file_list(socket, req){
     let json = [];
     let files = [];
-    fs.readdirSync('./src/static/songs').forEach(dir => {
-        fs.readdirSync('./src/static/songs/'+dir).forEach(file => {
+    let songs_path = path.join(__dirname, '../dist/', req)
+    fs.readdirSync(songs_path).forEach(dir => {
+        fs.readdirSync(path.join(songs_path,dir)).forEach(file => {
             files.push({'name': file});
         });
         json.push({'name': dir, 'files':files});
         files = [];
     });
-    io.to(socket.id).emit('update_dirs',json);
+    io.to(socket.id).emit('update_' + req ,json);
 }

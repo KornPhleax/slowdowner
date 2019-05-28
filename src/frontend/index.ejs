@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SlowDowner</title>
+    ${require ('./views/head.html')}
+  </head>
+  <body>
+    ${require ('./views/menu.html')}
+    <div class='container-fluid'>
+      <div class='row'>
+        <div class='col-md-5'>
+          <div class="input-group mb-3">
+            <select class="custom-select" id="dir-dropdown"></select>
+          </div>
+          <table id='songlist' class='table table-bordered'>
+            <thead>
+            <tr>
+              <th>Stücke</th>
+            </tr>
+            </thead>
+          </table>
+        </div>
+        <div class='card card-body bg-dark text-white col-md-7'>
+          <label class="info-txt" id="txt-titel">Bitte wähle ein Lied aus der Liste.</label>
+          <div class='row'>
+            <div class='col-6'>
+              <p class="info-txt-small" id="txt-timer">0:00</p>
+            </div>
+            <div class='col-6'>
+              <p class="info-txt-small text-right" id="txt-duration">0:00</p>
+            </div>
+            <div class="col-12 slidecontainer spacer-bottom">
+              <input type="range" min="0" max="1000" value="0" class="slider" id="position-slider">
+            </div>
+            <div class="col-lg-3 spacer-bottom">
+              <button id='playBtn' class='btn btn-success'><i id='playIcon' class='fa fa-play'></i></button>
+              <button id='stopBtn' class='btn btn-danger'><i class='fa fa-stop'></i></button>
+            </div>
+            <div class="col-lg-6 spacer-bottom">
+              <button id='aLoopBtn' class='btn btn-warning'><b>A</b></button>
+              <label class="info-txt-small" id="txt-aLoop">0:00</label>
+              <i class='fa fa-redo'></i>
+              <label class="info-txt-small" id="txt-bLoop">0:00</label>
+              <button id='bLoopBtn' class='btn btn-danger'><b>B</b></button>
+              <button id='resetLoopBtn' class='btn btn-danger'><i class='fa fa-times'></i></button> 
+            </div>
+            <div class="col-lg-6">
+              <label class="info-txt-small">Geschwindigkeit:</label>
+              <br>
+              <label class="info-txt-small align-right" id="txt-speed">100%</label>
+              <input type="range" min="50" max="150" value="100" class="slider" id="speed-slider">
+            </div>
+            <div class="col-lg-6">
+              <label class="info-txt-small not-on-iOS">Lautstärke:</label>
+              <br>
+              <label class="info-txt-small align-right not-on-iOS" id="txt-volume">70%</label>
+              <input type="range" min="0" max="1000" value="700" class="slider not-on-iOS" id="volume-slider">
+            </div>
+            <div class="col-12">
+              <p>Wenn du eine Datei von deinem PC auswählen willst, drücke auf diesen Button:</p>
+              <input id="extFile"  type="file" accept=".mp3,audio/*" >
+            </div>
+          </div>
+        </div>
+      </div>
+      ${require ('./views/footer.html')}
+    </div>
+  </body>
+</html>
