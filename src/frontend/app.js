@@ -12,6 +12,7 @@ let songDir = [];
 let player = null;
 let aLoopTime = null;
 let bLoopTime = null;
+let sliderPause = false;
 
 // init socket io
 $(function () {
@@ -100,6 +101,34 @@ $(function () {
     updateDisplay();
   });
 
+  $( '#position-slider' ).on('touchend', function () {
+    if(sliderPause){
+      player.play();
+      sliderPause = false;
+    }
+  });
+
+  $( '#position-slider' ).on('touchstart', function () {
+    if(player.isPlaying()){
+      player.pause();
+      sliderPause = true;
+    }
+  });
+
+  $( '#position-slider' ).mouseup(function () {
+    if(sliderPause){
+      player.play();
+      sliderPause = false;
+    }
+  });
+
+  $( '#position-slider' ).mousedown(function () {
+    if(player.isPlaying()){
+        player.pause();
+        sliderPause = true;
+      }
+  });
+
   $( '#speed-slider' ).change(function () {
     updateDisplay();
   });
@@ -109,7 +138,7 @@ $(function () {
   });
 
   $('input[type=range]').on('input', function () {
-    $(this).trigger('change');
+      $(this).trigger('change');
   });
 
   $('#extFile').change(function () {
@@ -238,10 +267,8 @@ Player.prototype = {
         html5: true, // Force to HTML5 so that the audio can stream in (best for large files).
         onplay: function() {
           updateDisplay();
-          console.log('pressed play button');
           $( '#playBtn' ).removeClass('btn-succes').addClass('btn-warning');
           $( '#playBtn svg' ).removeClass('fa-play').addClass('fa-pause');
-          // Start upating the progress of the track.
           requestAnimationFrame(self.step.bind(self));
         },
         onload: function() {
