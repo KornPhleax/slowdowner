@@ -24,7 +24,7 @@ then you can run
 ```yarn run start```
 to run the server locally 
 or use the provided Dockerfile to create a dockerimage like this
-```docker build -t slowdowner:v3```
+```docker build -t slowdowner:v3 .```
 for example
 
 ### Development
