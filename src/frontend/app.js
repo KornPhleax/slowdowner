@@ -7,7 +7,6 @@ let table = null;
 let columns = [
   { data: 'name' }
 ];
-let currentSong = null;
 let songDir = [];
 let player = null;
 let aLoopTime = null;
@@ -87,7 +86,7 @@ $(function () {
       return
     resetLoop();
   });
-  
+
   //dropdown  
 
   $( '#dir-dropdown' ).change(function () {
@@ -168,6 +167,7 @@ function updateDisplay(){
   let aLoopBtn    = $( '#aLoopBtn' );
   let bLoopBtn    = $( '#bLoopBtn' );
   let resetLoopBtn= $( '#resetLoopBtn' );
+  let downloadBtn = $( '#downloadBtn' );
 
   let volumeSl    = $( '#volume-slider' );
   let speedSl     = $( '#speed-slider' );
@@ -182,6 +182,7 @@ function updateDisplay(){
     aLoopBtn.prop("disabled", true);
     bLoopBtn.prop("disabled", true);
     resetLoopBtn.prop("disabled", true);
+    downloadBtn.prop("disabled", true);
     positionSl.prop("disabled", true);
   }else{
     stopBtn.prop("disabled", false);
@@ -202,6 +203,11 @@ function updateTable(){
         tableAPI.fnAddData(dir.files);
     }
   });
+}
+
+function updateDownloadLink(){
+  $( '#downloadLink' ).attr("href", player.url);
+  $( '#downloadLink' ).attr("download", player.song);
 }
 
 function tableClickListener(){
@@ -274,6 +280,8 @@ Player.prototype = {
         onload: function() {
           $( '#txt-duration' ).text(self.formatTime(Math.round(sound.duration())));
           $( '#playBtn' ).prop("disabled", false);
+          $( '#downloadBtn' ).prop("disabled", false);
+          updateDownloadLink();
           self.step();
         },
         onend: function() {

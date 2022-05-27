@@ -42,7 +42,7 @@
               <i class='fa fa-redo'></i>
               <label class="info-txt-small" id="txt-bLoop">0:00</label>
               <button id='bLoopBtn' class='btn btn-danger'><b>B</b></button>
-              <button id='resetLoopBtn' class='btn btn-danger'><i class='fa fa-times'></i></button> 
+              <button id='resetLoopBtn' class='btn btn-danger'><i class='fa fa-times'></i></button>
             </div>
             <div class="col-lg-6">
               <label class="info-txt-small">Geschwindigkeit:</label>
@@ -56,9 +56,12 @@
               <label class="info-txt-small align-right not-on-iOS" id="txt-volume">70%</label>
               <input type="range" min="0" max="1000" value="700" class="slider not-on-iOS" id="volume-slider">
             </div>
-            <div class="col-12">
+            <div class="col-8">
               <p>Wenn du eine Datei von deinem PC auswählen willst, drücke auf diesen Button:</p>
               <input id="extFile"  type="file" accept=".mp3,audio/*" >
+            </div>
+            <div class="col-4">
+              <a id="downloadLink" download href="" target="about:blank"><button id='downloadBtn' class='btn btn-success align-right'><i class='fa fa-download'></i></button></a>
             </div>
           </div>
         </div>

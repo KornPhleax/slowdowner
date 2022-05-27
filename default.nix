@@ -4,8 +4,8 @@ with pkgs.yarn;
 stdenv.mkDerivation {
   name = "yarn";
   buildInputs = [
-    nodejs-10_x
-    (yarn.override { nodejs = nodejs-10_x; })
+    nodejs
+    (yarn.override { nodejs = nodejs; })
     mozjpeg
     optipng
     autoconf
