@@ -1,9 +1,9 @@
 # SlowDowner
 music web player with slowdown option
 
-## System Dependendies
+## System Dependencies
 ### Ubuntu/Debian (apt)
-TODO
+install nodejs and yarn (should also work with raw npm). 
 
 ### NixOS
 If you have the nix package manager or are running NixOS you can install all dependencies with 
@@ -24,7 +24,7 @@ then you can run
 ```yarn run start```
 to run the server locally 
 or use the provided Dockerfile to create a dockerimage like this
-```docker build -t slowdowner:v3 .```
+```docker build -t slowdowner:v{X} .```
 for example
 
 ### Development
@@ -32,3 +32,4 @@ to run the test server locally run
 ``` yarn run start ```
 and in another terminal
 ``` yarn run dev ```
+to build and watch the static frontend files
