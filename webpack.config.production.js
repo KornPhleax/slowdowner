@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
 
 module.exports = {
@@ -10,46 +10,42 @@ module.exports = {
     sheets: './src/frontend/sheets.js'
   },
   output: {
-    filename: '[name].[hash].js',
+    filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist')
   },
   module: {
     rules: [
       {
-        test: /\.(scss)$/,
-        use:  ExtractTextWebpackPlugin.extract({
-          fallback: 'style-loader',
-          use:  [
-                  {
-                    // Interprets `@import` and `url()` like `import/require()` and will resolve them
-                    loader: 'css-loader'
-                  },
-                  {
-                    // Loader for webpack to process CSS with PostCSS
-                    loader: 'postcss-loader',
-                    options: {
-                      plugins: function () {
-                        return [
-                          require('autoprefixer')
-                        ];
-                      }
-                    }
-                  },
-                  {
-                    // Loads a SASS/SCSS file and compiles it to CSS
-                    loader: 'sass-loader'
-                  }
-                ]
-      })
+        test: /\.module\.s(a|c)ss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {}
+          }
+        ]
+      },
+      {
+        test: /\.s(a|c)ss$/,
+        exclude: /\.module.(s(a|c)ss)$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {}
+          }
+        ]
       },
       {
         test: /\.(png|jpg|gif)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {},
-          },
-        ],
+        type: 'asset/inline',
       },
       {
         test: /\.(html)$/,
@@ -58,11 +54,9 @@ module.exports = {
         ],
         use: {
           loader: 'html-loader',
-          options: {
-            attrs: ['link:href', 'img:src']
-          },
+          options: {}
         }
-      },
+      }
     ]
   },
   plugins: [
@@ -82,13 +76,18 @@ module.exports = {
                         '!songs/*'
                     ]
         }),
-        new ExtractTextWebpackPlugin("[name].[hash].css"),
+        new MiniCssExtractPlugin({
+          filename: '[name].[contenthash].css',
+          chunkFilename: '[id].[contenthash].css'
+        }),
         new HtmlWebpackPlugin({
+            inject: true,
             filename: 'index.html',
             template: './src/frontend/index.ejs',
             chunks: ['bundle']
         }),
         new HtmlWebpackPlugin({
+            inject: true,
             filename: 'sheets.html',
             template: './src/frontend/sheets.ejs',
             chunks: ['sheets']

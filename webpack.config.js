@@ -1,3 +1,5 @@
 module.exports = (env) => {
-  return require(`./webpack.config.${env}.js`)
+  if(env.production)
+    return require(`./webpack.config.production.js`)
+  return require(`./webpack.config.development.js`)
 }
