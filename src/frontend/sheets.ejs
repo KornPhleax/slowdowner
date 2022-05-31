@@ -2,10 +2,10 @@
 <html>
   <head>
     <title>Noten</title>
-    ${require ('./views/head.html')}
+    <%= require('./views/head.html').default %>
   </head>
   <body>
-    ${require ('./views/menu.html')}
+    <%= require('./views/menu.html').default %>
     <div class='container-fluid'>
       <div class='row'>
         <div class='col-md-12'>
@@ -30,7 +30,7 @@
           <div id='pdf_viewer'></div>
         </div>
       </div>
-      ${require ('./views/footer.html')}
+      <%= require('./views/footer.html').default %>
     </div>
   </body>
 </html>

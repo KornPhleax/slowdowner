@@ -1,5 +1,6 @@
 import './scss/app.scss';
 import 'bootstrap';
+const io = require('socket.io-client')
 
 //adding the fontawesome icons
 import { library, dom } from "@fortawesome/fontawesome-svg-core";

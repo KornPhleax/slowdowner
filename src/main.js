@@ -46,12 +46,16 @@ function get_file_list(socket, req){
     let json = [];
     let files = [];
     let songs_path = path.join(__dirname, '../dist/', req)
-    fs.readdirSync(songs_path).forEach(dir => {
-        fs.readdirSync(path.join(songs_path,dir)).forEach(file => {
-            files.push({'name': file});
+    fs.readdir(songs_path, (err, res) => {
+      if(err) io.to(socket.id).emit('message','failed to load data... - '+err)
+      else
+        res.forEach(dir => {
+          fs.readdirSync(path.join(songs_path,dir)).forEach(file => {
+              files.push({'name': file});
+          });
+          json.push({'name': dir, 'files':files});
+          files = [];
         });
-        json.push({'name': dir, 'files':files});
-        files = [];
+        io.to(socket.id).emit('update_' + req ,json);
     });
-    io.to(socket.id).emit('update_' + req ,json);
 }

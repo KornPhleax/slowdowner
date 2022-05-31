@@ -5,6 +5,7 @@
 /* Colors */
 $secondary-color:   #456632;
 $bg-dark:           #343a40;
+$bg-grey:           #fefefe;
 
 
 /* scss */
@@ -25,11 +26,16 @@ $bg-dark:           #343a40;
 
 body { 
   font: 13px Helvetica, Arial;
+  background-color: $bg-grey;
 }
 
 .container-fluid {
   max-width: 1100px;
   min-width: 25em;
+}
+
+.nav-link{
+  color: $bg-grey;
 }
 
 .info-txt{
@@ -41,7 +47,8 @@ body {
 }
 
 .btn{
- font-size: 1.8em; 
+  font-size: 1.8em;
+  width: 2em;
 }
 
 #txt-duration-label {
@@ -123,6 +130,6 @@ body {
 }
 
 .ui-state-highlight {
-  color: #FFFFFF !important;
+  color: #FFF !important;
   background: $bg-dark !important;
 }

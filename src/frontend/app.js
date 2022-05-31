@@ -211,10 +211,10 @@ function updateDownloadLink(){
 }
 
 function tableClickListener(){
-  $( "tbody tr").unbind();
-  $( "tbody tr").hover(function(){
+  $( "tbody tr td").unbind();
+  $( "tbody tr td").hover(function(){
     let selected = $(this).hasClass("ui-state-highlight");
-    $("tbody tr").removeClass("ui-state-highlight");
+    $("tbody tr td").removeClass("ui-state-highlight");
     if (!selected) {
       $(this).addClass("ui-state-highlight");
     }
@@ -278,6 +278,7 @@ Player.prototype = {
           requestAnimationFrame(self.step.bind(self));
         },
         onload: function() {
+          console.log(sound.duration())
           $( '#txt-duration' ).text(self.formatTime(Math.round(sound.duration())));
           $( '#playBtn' ).prop("disabled", false);
           $( '#downloadBtn' ).prop("disabled", false);
