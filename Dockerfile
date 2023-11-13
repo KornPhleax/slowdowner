@@ -13,7 +13,7 @@ COPY --from=builder /data/src/main.js ./src/
 COPY --from=builder /data/dist ./dist
 RUN yarn install --production
 RUN adduser --disabled-password --gecos "" slowdowner
-RUN chown slowdowner:slowdowner /data
+RUN chown -R slowdowner:slowdowner /data
 USER slowdowner
 CMD yarn run start
 EXPOSE 8080
